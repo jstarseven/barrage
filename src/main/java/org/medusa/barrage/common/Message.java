@@ -19,6 +19,7 @@ public class Message {
 
     /**
      * 给除自己外的所有用户发送消息
+     *
      * @param message
      * @param filterSession
      */
@@ -26,23 +27,20 @@ public class Message {
         //从昵称池拿出用户昵称
         Text text = JsonUtil.getBean(message, Text.class);
         text.setUserName(NickPool.get(filterSession.getId()));
-
         //判断是否是需要执行的脚本，是则return，由代理处理脚本
-        if(CMD.isCMD(text.getMessage())) {
+        if (CMD.isCMD(text.getMessage()))
             return;
-        }
-
         //给所有用户发送消息
         Set<String> keys = UserPool.getUserPool().keySet();
-        for(String key : keys) {
+        for (String key : keys) {
             Session session = (Session) UserPool.get(key);
             //屏蔽状态关闭的用户
-            if(!session.isOpen()) {
+            if (!session.isOpen()) {
                 UserPool.remove(session.getId());
                 continue;
             }
             //排除自己
-            if(session.equals(filterSession)) {
+            if (session.equals(filterSession)) {
                 continue;
             }
             try {

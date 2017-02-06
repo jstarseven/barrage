@@ -1,6 +1,7 @@
 package org.medusa.barrage.client;
 
 import org.medusa.barrage.common.Message;
+import org.medusa.barrage.common.NickPool;
 import org.medusa.barrage.common.UserPool;
 import org.medusa.barrage.proxy.MessageProxy;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class BarrageClient {
     public void onOpen(Session session) {
         //加入用户池
         UserPool.add(session);
+        NickPool.add(session.getId(), "user[" + session.getId() + "]");
     }
 
     @OnMessage
@@ -42,6 +44,5 @@ public class BarrageClient {
     public void onClose(Session session) {
         //移除用户池
         UserPool.remove(session.getId());
-
     }
 }
